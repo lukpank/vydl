@@ -1,4 +1,4 @@
-sources = files('main.vala', 'metadata.vala')
+sources = files('download.vala', 'main.vala', 'metadata.vala')
 
 executable(meson.project_name(),
 	   sources : sources,

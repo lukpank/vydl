@@ -28,6 +28,7 @@ public class Vydl.MainWindow : Gtk.Window {
     private Gtk.TreeView treeview;
     private Gtk.ListStore model;
     private bool searching = false;
+    private string? url = null;
     private Vydl.Metadata metadata = null;
     private Vydl.Format format = null;
     private int[] row_indices = null;
@@ -54,6 +55,7 @@ public class Vydl.MainWindow : Gtk.Window {
         this.download = new Gtk.Button.with_label ("Download");
         vbox.pack_start (this.download, false, false, 10);
         this.search.clicked.connect (this.start_search);
+        this.download.clicked.connect (this.start_download);
         this.entry.changed.connect (this.update);
         this.treeview.cursor_changed.connect (this.select_row);
         this.update ();
@@ -78,9 +80,9 @@ public class Vydl.MainWindow : Gtk.Window {
             this.format = null;
             this.model.clear ();
             this.update ();
-            var url = this.entry.text;
+            this.url = this.entry.text;
             var p = new Subprocess (SubprocessFlags.STDOUT_PIPE | SubprocessFlags.STDERR_PIPE,
-                                    "youtube-dl", "-j", "--", url);
+                                    "youtube-dl", "-j", "--", this.url);
             string output;
             string error;
             yield p.communicate_utf8_async (null, null, out output, out error);
@@ -115,6 +117,24 @@ public class Vydl.MainWindow : Gtk.Window {
         }
         this.searching = false;
         this.update ();
+    }
+
+    private void start_download () {
+        string? filename = this.metadata.filename;
+        int i = filename.last_index_of_char ('.');
+        if (i != -1) {
+            filename = filename.substring (0, i) + "." + this.format.ext;
+        }
+        filename = Vydl.choose_file_name (this, filename);
+        if (filename != null) {
+            var dlg = new Vydl.Downloader (metadata.title, filename, this.url, this.format.format_id);
+            if (dlg.start ()) {
+                dlg.set_transient_for (this);
+                dlg.show_all ();
+                dlg.run ();
+            }
+            dlg.destroy ();
+        }
     }
 
     private void select_row (Gtk.TreeView treeview) {
