@@ -1,0 +1,90 @@
+# Polish translations for vydl package.
+# Copyright (C) 2020 Łukasz Pankowski <lukpank at o2 dot pl>.
+# This file is distributed under the same license as the vydl package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: vydl\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-08-27 22:07+0200\n"
+"PO-Revision-Date: 2020-08-25 00:21+0200\n"
+"Last-Translator: Łukasz Pankowski <lukpank at o2 dot pl>\n"
+"Language-Team: none\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: src/download.vala
+msgid "Save as"
+msgstr "Zapisz jako"
+
+#: src/download.vala
+msgid "Save"
+msgstr "Zapisz"
+
+#: src/download.vala
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: src/download.vala
+msgid "All files"
+msgstr "Wszystkie pliki"
+
+#: src/download.vala
+msgid "Video files"
+msgstr "Pliki Video"
+
+#: src/download.vala
+msgid "Confirmation"
+msgstr "Potwierdzenie"
+
+#: src/download.vala
+msgid "Downloading"
+msgstr "Pobieranie"
+
+#: src/download.vala
+msgid "Connecting..."
+msgstr "Łączenie..."
+
+#: src/download.vala
+msgid "Cancel downloading?"
+msgstr "Anulować pobieranie?"
+
+#: src/download.vala src/main.vala
+msgid "Subprocess error."
+msgstr "Błąd procesu potomnego."
+
+#: src/download.vala
+msgid "Close"
+msgstr "Zamknij"
+
+#: src/main.vala
+msgid "Search"
+msgstr "Szukaj"
+
+#: src/main.vala
+msgid "Download"
+msgstr "Pobierz"
+
+#: src/main.vala
+msgid "Size"
+msgstr "Rozmiar"
+
+#: src/main.vala
+msgid "Quality"
+msgstr "Jakość"
+
+#: src/main.vala
+msgid "Title"
+msgstr "Tytuł"
+
+#: src/main.vala
+msgid "JSON parsing error."
+msgstr "Błąd parsowania JSONa."
+
+#: src/metadata.vala
+msgid "(best)"
+msgstr "(najlepszy)"

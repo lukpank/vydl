@@ -1,0 +1,4 @@
+namespace Vydl {
+    public const string GETTEXT_PACKAGE = "@gettext_package@";
+    public const string DATADIR = "@datadir@";
+}

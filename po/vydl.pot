@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the vydl package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: vydl\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-08-27 22:07+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/download.vala
+msgid "Save as"
+msgstr ""
+
+#: src/download.vala
+msgid "Save"
+msgstr ""
+
+#: src/download.vala
+msgid "Cancel"
+msgstr ""
+
+#: src/download.vala
+msgid "All files"
+msgstr ""
+
+#: src/download.vala
+msgid "Video files"
+msgstr ""
+
+#: src/download.vala
+msgid "Confirmation"
+msgstr ""
+
+#: src/download.vala
+msgid "Downloading"
+msgstr ""
+
+#: src/download.vala
+msgid "Connecting..."
+msgstr ""
+
+#: src/download.vala
+msgid "Cancel downloading?"
+msgstr ""
+
+#: src/download.vala src/main.vala
+msgid "Subprocess error."
+msgstr ""
+
+#: src/download.vala
+msgid "Close"
+msgstr ""
+
+#: src/main.vala
+msgid "Search"
+msgstr ""
+
+#: src/main.vala
+msgid "Download"
+msgstr ""
+
+#: src/main.vala
+msgid "Size"
+msgstr ""
+
+#: src/main.vala
+msgid "Quality"
+msgstr ""
+
+#: src/main.vala
+msgid "Title"
+msgstr ""
+
+#: src/main.vala
+msgid "JSON parsing error."
+msgstr ""
+
+#: src/metadata.vala
+msgid "(best)"
+msgstr ""

@@ -31,7 +31,7 @@ public class Vydl.Format {
         const int64 mi = 1024 * 1204;
         const int64 gi = 1024 * mi;
         if (filesize == -1) {
-            return "(best)";
+            return _("(best)");
         } else if (filesize >= gi) {
             var v = ((double) (filesize / mi)) / 1024;
             return "%.2f GiB".printf (v);

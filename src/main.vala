@@ -45,14 +45,14 @@ public class Vydl.MainWindow : Gtk.Window {
         vbox.pack_start (hbox, false, false, 0);
         this.entry = new Gtk.Entry ();
         hbox.pack_start (this.entry, true, true, 0);
-        this.search = new Gtk.Button.with_label ("Search");
+        this.search = new Gtk.Button.with_label (_("Search"));
         hbox.pack_start (this.search, false, false, 0);
         var sw = new Gtk.ScrolledWindow (null, null);
         vbox.pack_start (sw, true, true, 10);
         this.treeview = new Gtk.TreeView ();
         setup_tree_view (this.treeview);
         sw.add (treeview);
-        this.download = new Gtk.Button.with_label ("Download");
+        this.download = new Gtk.Button.with_label (_("Download"));
         vbox.pack_start (this.download, false, false, 10);
         this.search.clicked.connect (this.start_search);
         this.download.clicked.connect (this.start_download);
@@ -64,9 +64,9 @@ public class Vydl.MainWindow : Gtk.Window {
     private void setup_tree_view (Gtk.TreeView view) {
         this.model = new Gtk.ListStore (3, typeof (string), typeof (string), typeof (string));
         view.set_model (model);
-        view.insert_column_with_attributes (-1, "Size", new Gtk.CellRendererText (), "text", 0);
-        view.insert_column_with_attributes (-1, "Quality", new Gtk.CellRendererText (), "text", 1);
-        view.insert_column_with_attributes (-1, "Title", new Gtk.CellRendererText (), "text", 2);
+        view.insert_column_with_attributes (-1, _("Size"), new Gtk.CellRendererText (), "text", 0);
+        view.insert_column_with_attributes (-1, _("Quality"), new Gtk.CellRendererText (), "text", 1);
+        view.insert_column_with_attributes (-1, _("Title"), new Gtk.CellRendererText (), "text", 2);
     }
 
     private void update () {
@@ -87,7 +87,7 @@ public class Vydl.MainWindow : Gtk.Window {
             string error;
             yield p.communicate_utf8_async (null, null, out output, out error);
             if (p.get_exit_status () != 0) {
-                Vydl.show_error (this, (error != "") ? error : "Subprocess error.", null);
+                Vydl.show_error (this, (error != "") ? error : _("Subprocess error."), null);
                 this.searching = false;
                 this.update ();
                 return;
@@ -96,7 +96,7 @@ public class Vydl.MainWindow : Gtk.Window {
             if (j == null) {
                 this.searching = false;
                 this.update ();
-                Vydl.show_error (this, "JSON parsing error.", null);
+                Vydl.show_error (this, _("JSON parsing error."), null);
                 return;
             }
             this.metadata = new Vydl.Metadata (j);
@@ -153,6 +153,10 @@ public class Vydl.MainWindow : Gtk.Window {
 
 public static int main (string[] args) {
     Gtk.init (ref args);
+    Intl.setlocale ();
+    Intl.bindtextdomain (Vydl.GETTEXT_PACKAGE, Path.build_filename (Vydl.DATADIR, "locale"));
+    Intl.bind_textdomain_codeset (Vydl.GETTEXT_PACKAGE, "UTF-8");
+    Intl.textdomain (Vydl.GETTEXT_PACKAGE);
     var w = new Vydl.MainWindow ();
     w.show_all ();
     Gtk.main ();

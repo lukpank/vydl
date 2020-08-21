@@ -5,15 +5,15 @@
 namespace Vydl {
 
     public string? choose_file_name (Gtk.Window? parent, string filename) {
-        var dlg = new Gtk.FileChooserDialog ("Save as", parent, Gtk.FileChooserAction.SAVE);
-        dlg.add_buttons ("Save", Gtk.ResponseType.OK, "Cancel", Gtk.ResponseType.CANCEL);
+        var dlg = new Gtk.FileChooserDialog (_("Save as"), parent, Gtk.FileChooserAction.SAVE);
+        dlg.add_buttons (_("Save"), Gtk.ResponseType.OK, _("Cancel"), Gtk.ResponseType.CANCEL);
         dlg.do_overwrite_confirmation = true;
         var filter = new Gtk.FileFilter ();
         filter.add_pattern ("*");
-        filter.set_name ("All files");
+        filter.set_name (_("All files"));
         dlg.add_filter (filter);
         filter = new Gtk.FileFilter ();
-        filter.set_name ("Video files");
+        filter.set_name (_("Video files"));
         filter.add_mime_type ("video/*");
         dlg.add_filter (filter);
         dlg.set_current_name (filename);
@@ -29,7 +29,7 @@ namespace Vydl {
     public bool confirmation (Gtk.Window parent, string message) {
         var dlg = new Gtk.MessageDialog (parent, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                                          Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, message);
-        dlg.title = "Confirmation";
+        dlg.title = _("Confirmation");
         var result = dlg.run ();
         dlg.destroy ();
         return result == Gtk.ResponseType.YES;
@@ -50,7 +50,7 @@ public class Vydl.Downloader : Gtk.Dialog {
 
     public Downloader (string file_title, string filename, string url, string format_id) {
         Object (file_title: file_title, filename: filename, url: url, format_id: format_id,
-                title: "Downloading", border_width: 20, default_width: 640, default_height: 300);
+                title: _("Downloading"), border_width: 20, default_width: 640, default_height: 300);
     }
 
     construct {
@@ -58,10 +58,10 @@ public class Vydl.Downloader : Gtk.Dialog {
         var label = new Gtk.Label.with_mnemonic (this.file_title);
         box.pack_start (label, true, true, 20);
         this.progress = new Gtk.ProgressBar ();
-        this.progress.text = "Connecting...";
+        this.progress.text = _("Connecting...");
         this.progress.show_text = true;
         box.pack_start (this.progress, true, true, 20);
-        this.button = this.add_button ("Cancel", Gtk.ResponseType.CLOSE) as Gtk.Button;
+        this.button = this.add_button (_("Cancel"), Gtk.ResponseType.CLOSE) as Gtk.Button;
     }
 
     public bool start () {
@@ -82,7 +82,7 @@ public class Vydl.Downloader : Gtk.Dialog {
     }
 
     public new void run () {
-        while (base.run () == Gtk.ResponseType.CLOSE && ! finished && ! confirmation (this, "Cancel downloading?")) {}
+        while (base.run () == Gtk.ResponseType.CLOSE && ! finished && ! confirmation (this, _("Cancel downloading?"))) {}
         if (! this.finished) {
             this.finished = true;
             this.process.force_exit ();
@@ -111,7 +111,7 @@ public class Vydl.Downloader : Gtk.Dialog {
             bool normal_exit = this.process.get_if_exited ();
             if (normal_exit && this.process.get_exit_status () != 0 || ! normal_exit && ! this.finished) {
                 buf[int.min ((int) length, (int) buf.length - 1)] = '\0';
-                Vydl.show_error (this, (length > 0) ? (string) buf : "Subprocess error.", this.cancel);
+                Vydl.show_error (this, (length > 0) ? (string) buf : _("Subprocess error."), this.cancel);
                 return;
             }
         } catch (Error e) {
@@ -129,7 +129,7 @@ public class Vydl.Downloader : Gtk.Dialog {
                 }
                 update_progress (line);
             }
-            this.button.label = "Close";
+            this.button.label = _("Close");
         } catch (Error e) {
             Vydl.show_error (this, e.message, null);
         }
