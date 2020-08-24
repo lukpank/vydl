@@ -20,7 +20,7 @@ namespace Vydl {
     }
 }
 
-public class Vydl.MainWindow : Gtk.Window {
+public class Vydl.MainWindow : Gtk.ApplicationWindow {
 
     private Gtk.Entry entry;
     private Gtk.Button search;
@@ -33,12 +33,11 @@ public class Vydl.MainWindow : Gtk.Window {
     private Vydl.Format format = null;
     private int[] row_indices = null;
 
+    public MainWindow (Gtk.Application app) {
+        Object (application: app, title: "VYDL", border_width: 10, default_width: 640, default_height: 480);
+    }
+
     construct {
-        this.border_width = 10;
-        this.default_width = 640;
-        this.default_height = 480;
-        this.title = "VYDL";
-        this.destroy.connect (Gtk.main_quit);
         var vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 10);
         this.add (vbox);
         var hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 10);
@@ -146,14 +145,23 @@ public class Vydl.MainWindow : Gtk.Window {
     }
 }
 
+public class Vydl.Application : Gtk.Application {
+
+    public Application () {
+        Object (application_id: "pl.lupan.vydl", flags: ApplicationFlags.FLAGS_NONE);
+    }
+
+    protected override void activate () {
+        var w = new Vydl.MainWindow (this);
+        w.show_all ();
+    }
+}
+
 public static int main (string[] args) {
-    Gtk.init (ref args);
     Intl.setlocale ();
     Intl.bindtextdomain (Vydl.GETTEXT_PACKAGE, Path.build_filename (Vydl.DATADIR, "locale"));
     Intl.bind_textdomain_codeset (Vydl.GETTEXT_PACKAGE, "UTF-8");
     Intl.textdomain (Vydl.GETTEXT_PACKAGE);
-    var w = new Vydl.MainWindow ();
-    w.show_all ();
-    Gtk.main ();
-    return 0;
+    var app = new Vydl.Application ();
+    return app.run (args);
 }
