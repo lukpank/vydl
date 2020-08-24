@@ -16,7 +16,7 @@ namespace Vydl {
                     fn ();
                 }
             });
-        dlg.run ();
+        dlg.show_all ();
     }
 }
 
@@ -119,21 +119,16 @@ public class Vydl.MainWindow : Gtk.Window {
         this.update ();
     }
 
-    private void start_download () {
+    private async void start_download () {
         string? filename = this.metadata.filename;
         int i = filename.last_index_of_char ('.');
         if (i != -1) {
             filename = filename.substring (0, i) + "." + this.format.ext;
         }
-        filename = Vydl.choose_file_name (this, filename);
+        filename = yield Vydl.choose_file_name (this, filename);
         if (filename != null) {
-            var dlg = new Vydl.Downloader (metadata.title, filename, this.url, this.format.format_id);
-            if (dlg.start ()) {
-                dlg.set_transient_for (this);
-                dlg.show_all ();
-                dlg.run ();
-            }
-            dlg.destroy ();
+            var dlg = new Vydl.Downloader (this, metadata.title, filename, this.url, this.format.format_id);
+            dlg.start ();
         }
     }
 

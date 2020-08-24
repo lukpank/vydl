@@ -4,7 +4,8 @@
 
 namespace Vydl {
 
-    public string? choose_file_name (Gtk.Window? parent, string filename) {
+    public async string? choose_file_name (Gtk.Window? parent, string filename) {
+        SourceFunc return_result = choose_file_name.callback;
         var dlg = new Gtk.FileChooserDialog (_("Save as"), parent, Gtk.FileChooserAction.SAVE);
         dlg.add_buttons (_("Save"), Gtk.ResponseType.OK, _("Cancel"), Gtk.ResponseType.CANCEL);
         dlg.do_overwrite_confirmation = true;
@@ -17,22 +18,34 @@ namespace Vydl {
         filter.add_mime_type ("video/*");
         dlg.add_filter (filter);
         dlg.set_current_name (filename);
-        if (dlg.run () == Gtk.ResponseType.OK) {
-            var result = dlg.get_filename ();
-            dlg.destroy ();
-            return result;
-        }
+        dlg.show_all ();
+        string? result = null;
+        dlg.response.connect ((_, resp) => {
+                if (resp == Gtk.ResponseType.OK) {
+                    var file = dlg.get_file ();
+                    result = file.get_path ();
+                }
+                return_result ();
+            });
+        yield;
         dlg.destroy ();
-        return null;
+        return result;
     }
 
-    public bool confirmation (Gtk.Window parent, string message) {
+    public async bool confirmation (Gtk.Window parent, string message) {
+        SourceFunc return_result = confirmation.callback;
         var dlg = new Gtk.MessageDialog (parent, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                                          Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, message);
         dlg.title = _("Confirmation");
-        var result = dlg.run ();
+        dlg.show_all ();
+        bool result = false;
+        dlg.response.connect ((dlg, resp) => {
+                result = resp == Gtk.ResponseType.YES;
+                return_result ();
+            });
+        yield;
         dlg.destroy ();
-        return result == Gtk.ResponseType.YES;
+        return result;
     }
 }
 
@@ -48,9 +61,10 @@ public class Vydl.Downloader : Gtk.Dialog {
     private Gtk.Button button;
     private Subprocess process;
 
-    public Downloader (string file_title, string filename, string url, string format_id) {
+    public Downloader (Gtk.Window? parent, string file_title, string filename, string url, string format_id) {
         Object (file_title: file_title, filename: filename, url: url, format_id: format_id,
-                title: _("Downloading"), border_width: 20, default_width: 640, default_height: 300);
+                title: _("Downloading"), border_width: 20, default_width: 640, default_height: 300,
+                transient_for: parent, modal: true);
     }
 
     construct {
@@ -74,6 +88,8 @@ public class Vydl.Downloader : Gtk.Dialog {
             this.process_stdout.begin (stdout);
             var stderr = this.process.get_stderr_pipe ();
             this.process_stderr.begin (stderr);
+            this.show_all ();
+            this.response.connect (on_response);
             return true;
         } catch (Error e) {
             Vydl.show_error (this, e.message, this.cancel);
@@ -81,8 +97,11 @@ public class Vydl.Downloader : Gtk.Dialog {
         }
     }
 
-    public new void run () {
-        while (base.run () == Gtk.ResponseType.CLOSE && ! finished && ! confirmation (this, _("Cancel downloading?"))) {}
+    public async void on_response (Gtk.Dialog dlg, int response) {
+        if (response == Gtk.ResponseType.CLOSE && ! finished &&
+            ! yield Vydl.confirmation (this, _("Cancel downloading?"))) {
+            return;
+        }
         if (! this.finished) {
             this.finished = true;
             this.process.force_exit ();
@@ -95,6 +114,7 @@ public class Vydl.Downloader : Gtk.Dialog {
                 }
             }
         }
+        this.destroy ();
     }
 
     private void cancel () {
